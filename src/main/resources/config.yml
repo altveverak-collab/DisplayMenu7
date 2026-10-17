@@ -1,0 +1,153 @@
+# Open the menu when a player joins
+show-on-join: true
+
+# false (recommended): the menu is real objects in the world, so the cursor is always in front of the buttons.
+# Blocks closer to the camera than camera.distance would cut holes in it, so keep camera.distance small (0.5).
+# true: draws on top of every block, but the game then draws the layers in an unpredictable order
+# (the cursor can end up behind the hover highlight).
+see-through: false
+
+# Hide the held item while in the menu: it is set aside (and saved to disk) and put back in the same slot on close.
+hide-held-item: true
+
+# Also let SPACE / SHIFT act as a click (fallback)
+keyboard-click: false
+
+# CURSOR mode debugging: shows yaw/pitch/cursor in the action bar
+debug: true
+
+# Hide the player from other players while they are in the menu
+invisible: true
+
+# PLAY / CLOSE sends the player back to where they last were (where they logged out
+# or where they stood when they ran /menu). If false, the "spawn" section is used.
+return-to-last-location: true
+
+# Resource pack (logo, panel, cursor glyphs). Host DisplayMenu-resourcepack.zip somewhere
+# and put the URL + SHA-1 here. Leave url empty if you set the pack in server.properties
+# (then set wait-for-pack: true so the menu opens only after the pack has loaded).
+resource-pack:
+  url: ""
+  sha1: ""
+wait-for-pack: false   # set to true if the menu looks different on join than with /menu (ItemsAdder pack not loaded yet)
+# Ticks (20 = 1 s) to wait on join before the menu opens, so the client has loaded the chunks around the
+# menu camera (and the pack). Raise it if the first menu after joining looks different from /menu.
+join-delay: 40
+# With wait-for-pack: open the menu anyway after this many seconds if the pack never reports "loaded".
+wait-for-pack-timeout: 15
+
+# Use /menuset in-game to fill x/y/z/yaw/pitch (x/y/z is the EYE position).
+# Keep ~3 blocks of free space in front of it.
+camera:
+  world: world
+  x: 0.5
+  y: 80.0
+  z: 0.5
+  yaw: 0
+  pitch: 0
+  distance: 0.5        # how far in front of the camera the menu floats. Small = no block can get in the way
+  fov: 110             # MUST match the players' in-game FOV (Options > Video). 70 = default, 110 = Quake Pro
+  aspect: 1.7778       # screen aspect ratio the layout is designed for
+  # CAMERA = ProtocolLib camera + normal left click (needs the ProtocolLib plugin). Recommended.
+  # CURSOR = frozen camera + mouse cursor, no shaking (spectator camera trick, like the video).
+  # FREE   = normal camera, aim the crosshair at buttons (fallback, always smooth).
+  # LOCK   = old method: frozen by resetting the camera every tick (shakes).
+  mode: CAMERA
+  limit-yaw: 40        # FREE mode: how far (degrees) the player can look sideways
+  limit-pitch: 25      # FREE mode: how far up/down
+  sensitivity: 1.0     # LOCK mode: cursor speed
+
+# Logo / panel / cursor images. For each one, `image` is:
+#   ""         -> nothing is shown (empty = no image, no white box)
+#   "builtin"  -> the glyph from DisplayMenu's own resource pack
+#   an ItemsAdder font image (see below)
+# Logo from ItemsAdder (optional).
+# image accepts any of:   "myserver:logo"   (ItemsAdder font image id: namespace:id)
+#                         "%img_myserver:logo%"   or   ":logo:"  (ItemsAdder placeholders)
+# If you use ItemsAdder's resource pack, leave resource-pack.url empty above and set wait-for-pack: true,
+# so the menu only opens once the pack has loaded.
+logo:
+  image: ""
+  pixel-width: 192   # width of your font image in pixels as it appears in-game (texture width x scale_ratio)
+  scale: 1.0         # extra size multiplier for this logo (1.5 = 50% bigger)
+  offset-u: 0.0      # nudge right (+) / left (-), fraction of screen width
+  offset-v: 0.0      # nudge up (+) / down (-), fraction of screen height
+
+# Full-screen background. Minecraft can't blur the world live, but the menu camera never moves, so the best
+# trick is: take a screenshot from the menu camera, blur it in any image editor, add it to ItemsAdder as a
+# font image and put its id here. `opacity` 0.3 = 30% visible. Leave image empty for no background image.
+background:
+  image: ""
+  pixel-width: 1920   # size of that image in pixels (it is stretched to fill the screen)
+  pixel-height: 1080
+  opacity: 1.0
+  offset-u: 0.0      # move left (-) / right (+), in half-screen widths
+  offset-v: 0.0
+
+# Dark side strip behind the buttons (optional ItemsAdder image, stretched to cover the left part of the screen).
+panel:
+  image: ""
+  pixel-width: 128   # size of your image in pixels (used for stretching)
+  pixel-height: 16
+  offset-u: 0.0      # move left (-) / right (+), in half-screen widths
+  offset-v: 0.0
+
+# Mouse cursor (optional ItemsAdder image).
+cursor:
+  smoothing: 1       # ticks the cursor takes to glide to its new spot. 0 = instant (least delay, a bit steppy), 1 = default, 2 = smooth but laggy
+  image: ""
+  pixel-width: 8
+  offset-u: 0.0      # move the image so its tip is on the pointer: fraction of the cursor size
+  offset-v: 0.0      # (e.g. offset-u: 0.5 and offset-v: -0.5 if the tip is the top-left corner)
+
+# Button highlight when the cursor is over it (hex colours)
+hover:
+  background: "#1E90FF"
+  opacity: 0.6       # 1 = solid, 0.5 = half see-through
+  text: "#FFFFFF"
+
+# Tint over the whole screen behind the menu. This is a see-through colour layer (frosted / dimmed look),
+# not a real blur - Minecraft can't blur the world from a plugin.
+overlay:
+  opacity: 0.0       # 0 = off (no default white layer), 0.3 = 30%, 1 = solid
+  color: "#FFFFFF"   # white = frosted, "#000000" = dimmed
+  offset-v: 0.0      # if a strip of the screen stays uncovered, nudge up (+) / down (-), fraction of screen height
+
+# Layout values are fractions of the screen
+layout:
+  ui-scale: 1.25       # make logo / text / cursor bigger or smaller
+  left: -0.55          # left edge of logo + buttons, -1 = left screen edge
+  panel-width: 0.6     # dark gradient strip, fraction of screen width
+  logo-width: 0.27
+  logo-v: 0.34         # +1 = top of screen, -1 = bottom
+  first-button-v: 0.06
+  button-spacing: 0.15
+  button-scale: 0.6
+  cursor-size: 0.07    # in blocks (LOCK mode)
+
+# Fallback spawn if return-to-last-location is false. Set with /menuset spawn
+spawn:
+  world: world
+  x: 0.5
+  y: 80.0
+  z: 20.5
+  yaw: 180
+  pitch: 0
+
+# Actions: PLAY | CLOSE | COMMAND:<cmd> | CONSOLE:<cmd> (%player%) | MESSAGE:<text> | KICK:<text>
+# scale: size of this button's text relative to layout.button-scale (1.0 = normal, 1.5 = 50% bigger).
+# The spacing between buttons adjusts automatically.
+buttons:
+  - label: "PLAY"
+    action: "PLAY"
+    scale: 1.5
+  - label: "SETTINGS"
+    action: "COMMAND:settings"
+    scale: 1.1
+  - label: "CREDITS"
+    action: "MESSAGE:&6Built with display entities."
+    scale: 1.0
+  - label: "QUIT"
+    action: "KICK:&eSee you soon!"
+    scale: 0.9
+    gap-before: true

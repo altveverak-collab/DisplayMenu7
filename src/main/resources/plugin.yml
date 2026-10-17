@@ -1,0 +1,15 @@
+name: DisplayMenu
+version: 1.0.0
+main: dev.displaymenu.DisplayMenuPlugin
+api-version: '1.21'
+softdepend: [ProtocolLib, ItemsAdder]
+commands:
+  menu:
+    description: Open the display-entity main menu
+    usage: /menu [reload]
+  menuset:
+    description: Set where players stand to see the menu (your eyes + look direction)
+    usage: /menuset [spawn]
+permissions:
+  displaymenu.admin:
+    default: op
